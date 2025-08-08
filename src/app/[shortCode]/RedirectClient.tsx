@@ -7,6 +7,7 @@ const RedirectClient = ({ shortCode }: { shortCode: string }) => {
   useEffect(() => {
     const fetchLongUrl = async () => {
       try {
+        // Ensure you have the corresponding API route at this path
         const response = await fetch(`/api/redirect/${shortCode}`);
         const data = await response.json();
 

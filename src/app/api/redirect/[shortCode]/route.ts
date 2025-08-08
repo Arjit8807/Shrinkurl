@@ -10,10 +10,7 @@ export async function GET(
 ) {
   try {
     const { shortCode } = params;
-
-    const link = await prisma.link.findUnique({
-      where: { shortCode },
-    });
+    const link = await prisma.link.findUnique({ where: { shortCode } });
 
     if (link) {
       return NextResponse.json({ longUrl: link.longUrl });
@@ -21,7 +18,7 @@ export async function GET(
       return NextResponse.json({ message: 'Link not found' }, { status: 404 });
     }
   } catch (error) {
-  console.error("Redirect API Error:", error);
-  return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
-}
+    console.error("Redirect API Error:", error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
 }
