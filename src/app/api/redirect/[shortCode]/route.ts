@@ -4,13 +4,19 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(
-  request: Request,
-  { params }: { params: { shortCode: string } }
-) {
+export async function GET(request: Request) {
   try {
-    const { shortCode } = params;
-    const link = await prisma.link.findUnique({ where: { shortCode } });
+    const url = new URL(request.url);
+    const pathnameParts = url.pathname.split('/');
+    const shortCode = pathnameParts[pathnameParts.length - 1];
+
+    if (!shortCode) {
+      return NextResponse.json({ message: 'Short code is missing' }, { status: 400 });
+    }
+
+    const link = await prisma.link.findUnique({
+      where: { shortCode },
+    });
 
     if (link) {
       return NextResponse.json({ longUrl: link.longUrl });
